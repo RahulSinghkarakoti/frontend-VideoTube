@@ -4,7 +4,7 @@ import avatar from "../img/avatar.jpeg";
 import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getChannelStats, getChannelVideo } from "../api/userServices";
-import { Card } from "../components";
+import { Card, Loader } from "../components";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -12,6 +12,7 @@ function Channel() {
   const [stats, setStats] = useState({});
   const [channelVideo, setChannelVideo] = useState([]);
   const user = useSelector((state) => state.auth.userData);
+  const [loading,setLoading]=useState(false)
   // console.log(user)
 
   const getStats = async () => {
@@ -27,25 +28,25 @@ function Channel() {
     try {
       const response = await getChannelVideo();
       setChannelVideo(response.data);
+    setLoading(false)
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    setLoading(true)
     getStats();
     getVideo();
   }, []);
+ 
 
-  console.log(stats);
-  console.log(channelVideo);
-
-  {
-    channelVideo.map((video, index) => {
-      console.log(video.thumbnail);
-      console.log(video.title);
-    });
-  }
+  if(loading)
+    return  <div className="flex h-screen w-full ">
+       <div className="bg-zinc-900    sm:pl-[10vw]   flex items-center justify-center     flex-1 overflow-auto">
+         <Loader/>
+      </div>
+    </div>
 
   return (
     <div className="flex h-screen w-full ">

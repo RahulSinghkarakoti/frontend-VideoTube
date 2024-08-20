@@ -35,6 +35,16 @@ const toggleCommentLike=async(commentId)=>{
   }
 }
 
+const toggleTweetLike=async(tweetId)=>{
+  console.log("toggleTweetLike");
+  try {
+    const response = await axiosInstance.post(`/like/toggle/t/${tweetId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
  
 
-export {getLikedVideo,toggleVideoLike,toggleCommentLike}
+export {getLikedVideo,toggleVideoLike,toggleCommentLike,toggleTweetLike}

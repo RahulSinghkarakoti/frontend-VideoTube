@@ -5,6 +5,7 @@ import SkeletonCard from "./SkeletonCard.jsx"
 import AnimatedContainer from "./AnimatedContainer.jsx"
 import Playlistcard from "./Playlistcard.jsx"
 import Loader from "./Loader/Loader.jsx"
+import TweetCard from "./TweetCard.jsx"
 
 export {
     Card,
@@ -13,5 +14,6 @@ export {
     SkeletonCard,
     AnimatedContainer,
     Playlistcard,
-    Loader
+    Loader,
+    TweetCard
 }

@@ -10,35 +10,31 @@ const createPlaylist = async (formData) => {
 };
 
 const deletePlaylist = async (playlistId) => {
-    try{
-        const response=await axiosInstance.delete(`/playlist/${playlistId}`);
-        return response.data;
-        }
-        catch(error){
-            throw error;
-        }
-
+  try {
+    const response = await axiosInstance.delete(`/playlist/${playlistId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
-const getPlaylistById=async(playlistId)=>{
-    try{
-        const response=await axiosInstance.get(`/playlist/${playlistId}`);
-        return response.data;
-        }
-        catch(error){
-            throw error;
-        }
-}
+const getPlaylistById = async (playlistId) => {
+  try {
+    const response = await axiosInstance.get(`/playlist/${playlistId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
-const updatePlaylist=async()=>{
-    try{
-        const response=await axiosInstance.patch(`/playlist/${playlistId}`);
-        return response.data;
-        }
-        catch(error){
-            throw error;
-        }
-}
+const updatePlaylist = async () => {
+  try {
+    const response = await axiosInstance.patch(`/playlist/${playlistId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const getUserPlaylists = async (userId) => {
   try {
@@ -49,25 +45,27 @@ const getUserPlaylists = async (userId) => {
   }
 };
 
-const addToPlaylist = async (videoId,playlistId) => {
-    try {
-        const response = await axiosInstance.patch(`/playlist/add/${videoId}/${playlistId}`);
-        return response.data;
-        } catch (error) {
-            throw error;
-            }
+const addToPlaylist = async (videoId, playlistId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/playlist/add/${videoId}/${playlistId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
-
-
-const removeFromPlaylist = async (videoId,playlistId) => {
-    try {
-        const response = await axiosInstance.patch(`/playlist/remove/${videoId}/${playlistId}`);
-        return response.data;
-        } catch (error) {
-            throw error;
-            }
-}; 
+const removeFromPlaylist = async (videoId, playlistId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/playlist/remove/${videoId}/${playlistId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   createPlaylist,
@@ -76,5 +74,5 @@ export {
   deletePlaylist,
   removeFromPlaylist,
   updatePlaylist,
-  getUserPlaylists
+  getUserPlaylists,
 };
