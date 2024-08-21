@@ -35,7 +35,7 @@ function Tweet() {
         setShowPopup(false);
         setMessage("");
       }, 2000);
-      getTweet();
+      getAllTweet();
       setAddTweetForm(false);
     } catch (error) {
       console.log(error);
