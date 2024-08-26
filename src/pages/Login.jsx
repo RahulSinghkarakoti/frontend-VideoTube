@@ -18,12 +18,18 @@ function Login() {
   const userData = useSelector((state) => state.auth.userData);
 
   const [inputs, setInputs] = useState({
-    username: "rahul",
-    password: "mm",
-    email: "rsk@gmail.com",
+    // username: "rahul",
+    // password: "mm",
+    // email: "rsk@gmail.com",
+
+    //testUser->2
     // username: "rahul123",
     // email: "karakoti@gmail.com",
     // password: "12345mmm",
+
+    "username":"rahul29",
+    "email":"rsinghk@gmail.com",
+    "password":"mnbvcxz"
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,11 +38,11 @@ function Login() {
     e.preventDefault();
     const fetchUser = async () => {
       try {
-        // setLoading(true);
+        setLoading(true);
         const response = await login(inputs);
-        handleLoginSuccess(response.data);
-      } catch (error) {
-         console.log(error)
+        handleLoginSuccess(response.data); 
+      } catch (error) { 
+         console.log(error.response.status)   
         if(error.response.status){
           setStatus(error.response.status)
           setSetShowPopup(true)

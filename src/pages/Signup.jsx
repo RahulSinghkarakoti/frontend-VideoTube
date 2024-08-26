@@ -45,7 +45,7 @@ function Signup() {
       return;
     }
     // if (!error) {
-    console.log(error);
+    // console.log(error);
     setError("");
     // setLoading(true)
     uploadData();
@@ -64,16 +64,19 @@ function Signup() {
 
 
     try {
-      setLoading(true)
+      // setLoading(true)
       const response = await register(formData);
       const { user, refreshToken, createdUser } = response.data;
       localStorage.setItem("accessToken", user);
       localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("loginstatus", true);
+
       if (response) dispatch(authLogin(createdUser));
       setLoading(false)
       navigate('/')
     } 
     catch (error) {
+      console.log("error occur in uploadedata")
       if (error.response) {
         if (error.response.status === 409) {
           setError("User already exist");

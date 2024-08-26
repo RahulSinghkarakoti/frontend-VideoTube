@@ -21,6 +21,7 @@ const getSubscribers=async(channelId)=>{
 const getSubscribedChannel=async(channelId)=>{
     try {
         const response=await axiosInstance.get(`subscriptions/u/${channelId}`)
+        console.log(response)
         return response.data
     } catch (error) {
         throw error

@@ -44,7 +44,7 @@ function Home() {
 
   if (loading)
     return (
-      <div className="  h-screen w-full  sm:pb-0 pb-[25%]  bg-black text-white flex justify-between">
+      <div className=" sm:h-full  w-full   bg-black text-white flex justify-between">
         <div className="bg-zinc-900   sm:pl-[10vw]     flex-1 overflow-auto">
           <div className="p-2 flex  flex-wrap gap-3 ">
             {Array.from({ length: 12 }).map((_, index) => (

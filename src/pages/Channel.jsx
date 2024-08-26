@@ -55,21 +55,21 @@ function Channel() {
           <img
             src={user?.coverImage || coverImg}
             alt="coverImg"
-            className="w-full sm:h-52 h-full  rounded-xl"
+            className="w-full sm:h-52 h-32  rounded-xl"
           />
-          <div className="flex gap-3 m-2 sm:h-32   border-b-2 border-zinc-500">
+          <div className="flex sm:gap-3 gap-1 m-2 sm:h-32   border-b-2 border-zinc-500">
             <img
               src={user?.avatar || avatar}
               alt="coverImg"
-              className="sm:w-40 w-20 sm:h-40  h-20   bg-black  border-4 border-green-600  rounded-full  sm:-top-14 -top-10 relative"
+              className="sm:w-40 w-20 sm:h-40  h-20  p-2 bg-black    rounded-full  sm:-top-14 -top-10 relative"
             />
-            <div className="m-2 w-full flex justify-between   ">
-              <div className=" flex  flex-col h-2/3 justify-between">
-                <h1 className="  sm:text-3xl text-sm font-semibold">
+            <div className="w-full flex sm:flex-row flex-col sm:justify-between   ">
+              <div className=" flex  flex-col h-2/3 justify-between ">
+                <h1 className="  sm:text-3xl text-2xl font-semibold ">
                   {" "}
                   {user?.username || "channelname"}
                 </h1>
-                <div className="flex sm:gap-3 gap-1 sm:text-sm text-zinc-300 text-[10px]">
+                <div className="flex flex-wrap sm:gap-3 gap-1 sm:text-sm text-zinc-300 text-[10px]">
                   <p className="bg-zinc-700 rounded-2xl text-gray-300 px-2">
                     {stats.totalSubscribers} Followers
                   </p>
@@ -87,17 +87,17 @@ function Channel() {
                   </p>
                 </div>
               </div>
-              <div className="h-full flex sm:flex-col justify-around items-center">
+              <div className="h-full flex sm:flex-col justify-around items-center  py-2">
                 <Link to="/followers">
-                  <div className="flex gap-2 bg-gray-400 font-semibold   text-gray-900  p-1 rounded-xl ">
-                    <h1 className="text-xl">Followers</h1>
-                    <FaExternalLinkAlt size={20} />
+                  <div className="flex items-center gap-2 bg-gray-400 font-semibold sm:text-xl text-sm  text-gray-900  p-1 rounded-xl ">
+                    <h1 className="">Followers</h1>
+                    <FaExternalLinkAlt   />
                   </div>
                 </Link>
                 <Link to="/following">
-                <div className="flex gap-2 bg-gray-400 font-semibold   text-gray-900  p-1 rounded-xl ">
-                  <h1 className="text-xl">Following</h1>
-                  <FaExternalLinkAlt size={20} />
+                <div className="flex gap-2 bg-gray-400 font-semibold  sm:text-xl text-sm  text-gray-900  p-1 rounded-xl ">
+                  <h1 className=" ">Following</h1>
+                  <FaExternalLinkAlt   />
                 </div>
                 </Link>
               </div>

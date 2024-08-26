@@ -9,6 +9,7 @@ function Following() {
 
   const getFollowers = async () => {
     const response = await getSubscribedChannel(userData._id);
+    console.log(response)
     setFollowers(response.data);
   };
 
@@ -16,7 +17,7 @@ function Following() {
     getFollowers();
   }, [userData]);
 
-  console.log(followers);
+  // console.log(followers);
 
   return (
     <div className="flex h-screen w-full">
@@ -24,9 +25,9 @@ function Following() {
         <div className="h-full   text-white p-2">
           <h1 className="text-3xl font-semibold">Following:</h1>
           <div className=" p-2 flex flex-wrap  gap-2">
-            {followers &&
+            {
               followers.map((item) => (
-                <div className="bg-zinc-700 p-2 w-1/3  rounded-xl flex items-center gap-2  ">
+                <div className="bg-zinc-700 p-2 sm:w-1/3  rounded-xl flex items-center gap-2  ">
                   <img
                     src={item.subscribedChannel.avatar}
                     alt=""
@@ -42,7 +43,9 @@ function Following() {
                       </div> 
                   </div>
                 </div>
-              ))}
+              ))
+               
+            }
           </div>
         </div>
       </div>

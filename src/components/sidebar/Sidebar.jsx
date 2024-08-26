@@ -12,12 +12,12 @@ function Sidebar() {
   const navigate = useNavigate();
   return (
     // <div className="bg-black flex flex-row sm:flex-col sm:justify-start justify-between sm:gap-2 gap-1 text-white p-2 sm:p-1 text-xl sm:text-2xl text-center h-auto sm:h-[100vh] fixed   sm:static sm:left-auto left-0 z-10 sm:bottom-auto bottom-0 w-full  ">
-    <div className="bg-black flex flex-row sm:flex-col sm:justify-start justify-between sm:gap-2 gap-1 text-white p-2 sm:p-1 text-xl sm:text-2xl text-center h-auto sm:h-[100vh] fixed sm:static sm:left-auto left-0 bottom-0 z-50  w-full">
+    <div className="bg-black flex flex-row sm:flex-col sm:justify-start justify-between sm:gap-2 gap-1 text-white p-2 sm:p-1 text-xl sm:text-2xl text-center h-auto sm:h-[100vh] fixed sm:static sm:left-auto left-0 bottom-0   w-full">
       <NavLink
         to={"/"}
         className={({ isActive }) =>
           isActive
-            ? "text-blue-500 font-bold bg-zinc-800 rounded-xl "
+            ? " text-blue-500 font-bold bg-zinc-800 rounded-xl "
             : "text-gray-500"
         }
       >
@@ -31,7 +31,7 @@ function Sidebar() {
         className={({ isActive }) =>
           isActive
             ? "text-blue-500 font-bold bg-zinc-800 rounded-xl"
-            : "text-gray-500"
+            :  "text-gray-500"
         }
       >
         <div className="flex flex-col items-center   hover:bg-zinc-800 rounded-xl  p-1 mb-2 ">

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { RiArrowDropDownLine,RiArrowDropUpLine } from "react-icons/ri";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { getVideo, updateVideoView } from "../api/videoService";
-
+import { TbBell, TbBellRinging } from "react-icons/tb";
 import {
   addVideoComment,
   deleteVideoComment,
   getVideoComment,
 } from "../api/commentService";
 import { toggleCommentLike, toggleVideoLike } from "../api/likeService";
-
 import { useSelector } from "react-redux";
 import PopupMsg from "../components/PopupMsg";
 import {
@@ -20,12 +20,15 @@ import {
   createPlaylist,
   getUserPlaylists,
 } from "../api/playlistService";
+import { toggleSubscription } from "../api/subscription";
+import "../components/Loader/LineLoader.css";
 
 function Video() {
   const location = useLocation();
   const { videoId } = location.state || {};
   const [videoData, setVideoData] = useState({});
   const [like, setLike] = useState(false);
+  const [subscribe, setSubscribe] = useState(false);
   const [comments, setComments] = useState({});
   const docs = comments?.docs || [];
   const loggedInUser = useSelector((state) => state.auth.userData);
@@ -34,12 +37,15 @@ function Video() {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isPlaylistFormVisible, setIsPlaylistFormVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
+  const [ProcessLoading, setProcessLoading] = useState(false);
+
+  const [isDescOpen, setIsDescOpen] = useState(false);
 
   const fetchPlaylists = async () => {
     console.log("fetching playlists");
     try {
       const response = await getUserPlaylists(loggedInUser._id);
-
+      // console.log(response)
       setPlaylists(response.data);
     } catch (error) {
       console.log(error);
@@ -68,8 +74,11 @@ function Video() {
     );
     if (confirmed) {
       try {
+        setProcessLoading(true);
         const response = await deleteVideoComment(commentId);
         if (response.success) {
+          setProcessLoading(false);
+
           setMessage("comment deleted ");
           setShowPopup(true);
         }
@@ -93,15 +102,21 @@ function Video() {
 
   function handleNewComment(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const comment = formData.get("comment");
-    addComment(formData);
-    e.target.reset();
+    try {
+      setProcessLoading(true);
+      const formData = new FormData(e.target);
+      const comment = formData.get("comment");
+      addComment(formData);
+      e.target.reset();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const addComment = async (formData) => {
     try {
       const response = await addVideoComment(videoId, formData);
+      setProcessLoading(false);
       fetchComment();
     } catch (error) {
       console.error(error);
@@ -122,6 +137,8 @@ function Video() {
       const response = await getVideo(videoId);
       const videoinfo = response.data[0];
       setVideoData(videoinfo);
+      console.log(response.data[0]);
+      setSubscribe(videoinfo.isSubscribed);
 
       if (videoinfo.isLikedByUser) {
         setLike(true);
@@ -201,17 +218,38 @@ function Video() {
     }
   };
 
+  const handleSubscribe = async (_id) => {
+    console.log("in handle subscribe");
+    try {
+      setProcessLoading(true);
+      const response = await toggleSubscription(_id);
+      console.log(response.data);
+      setSubscribe((prev) => !prev);
+      setShowPopup(true);
+      setProcessLoading(false);
+      setMessage(response.data);
+      setTimeout(() => {
+        setMessage("");
+        setShowPopup(false);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchVideo();
     fetchComment();
   }, [videoId]);
 
   const ownerDetail = videoData.ownerDetail || {};
-  console.log(playlists);
+  // console.log(videoData);
   return (
     <div className="flex  h-screen w-full">
       {showPopup && <PopupMsg message={message} />}
       <div className="bg-[#1E201E]   sm:pl-[10vw]    flex-1 overflow-auto    text-white">
+        {ProcessLoading && <div className="w-full processLoader"></div>}
+
         {loggedInUser !== null ? (
           <div className="  p-2 sm:flex  gap-3">
             <div className="  sm:w-[54vw] sm:h-[80vh]  ">
@@ -229,8 +267,8 @@ function Video() {
                 </p>
               </div>
 
-              <div className="flex justify-between items-center sm:m-3   ">
-                <div className="flex gap-2 w-1/2 ">
+              <div className="flex gap-2 items-center sm:m-3    ">
+                <div className="flex gap-2  w-1/2 ">
                   <img
                     src={ownerDetail.avatar}
                     alt=""
@@ -241,13 +279,35 @@ function Video() {
                       {" "}
                       {ownerDetail.username}
                     </h1>
-                    <h3 className="sm:text-sm text-xs">0 subscribers </h3>
+                    <h3 className="sm:text-sm text-xs">
+                      {videoData.totalSubscribers} subscribers{" "}
+                    </h3>
                   </div>
                 </div>
-                <div className=" m-2 flex justify-end items-center  gap-3 w-1/2 ">
+                <div className="  flex justify-end items-center gap-2   w-full ">
+                  <div
+                    onClick={() => handleSubscribe(ownerDetail._id)}
+                    className="w-1/3"
+                  >
+                    {ownerDetail._id !== loggedInUser._id ? (
+                      !subscribe ? (
+                        <div className="flex justify-around sm:text-sm text-[9px] border-2 border-zinc-500 rounded-full sm:p-1 ">
+                          <TbBell size={20} />
+                          <span className=" sm:text-sm text-[9px]">
+                            Subscribe
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex justify-around sm:text-sm text-[9px] bg-white text-black  border-2  border-zinc-500 rounded-full sm:p-1">
+                          <TbBellRinging size={20} />
+                          <span>Subscribed</span>
+                        </div>
+                      )
+                    ) : null}
+                  </div>
                   <div
                     onClick={() => handleLike(videoId)}
-                    className="flex items-center justify-center gap-2 sm:text-sm text-[9px] w-1/2 border-2 border-zinc-500 rounded-full sm:p-1"
+                    className="flex items-center justify-center gap-2 sm:text-sm text-[9px] w-1/3 border-2 border-zinc-500 rounded-full sm:p-1"
                   >
                     {like ? (
                       <AiFillLike size={20} />
@@ -259,9 +319,9 @@ function Video() {
                     </span>
                   </div>
 
-                  <div className="relative w-1/2 max-w-xs">
+                  <div className="relative w-1/3">
                     <div
-                      className="w-full border-2 border-zinc-500 rounded-full p-2 flex items-center justify-center gap-2   cursor-pointer hover:bg-gray-700"
+                      className="w-full border-2 border-zinc-500  rounded-full sm:p-1 flex items-center justify-center gap-2   cursor-pointer hover:bg-gray-700"
                       onClick={() => {
                         fetchPlaylists();
                         setIsMenuVisible(!isMenuVisible);
@@ -269,22 +329,23 @@ function Video() {
                       }}
                     >
                       <MdOutlinePlaylistAdd size={20} />
-                      <span className="text-sm">Save</span>
+                      <span className="sm:text-sm text-[9px]">Save</span>
                     </div>
 
                     {/* Dropdown Menu */}
                     {isMenuVisible && (
                       <div className="absolute w-full mt-2 bg-gray-800 border border-gray-400 rounded-xl shadow-lg z-10">
                         <ul className="flex flex-col  p-2 text-white">
-                          {playlists.map((item, index) => (
-                            <li
-                              key={index}
-                              className="hover:bg-gray-700 p-1 text-xs rounded-lg"
-                              onClick={() => addVideoToPlaylist(item._id)}
-                            >
-                              {item.name}
-                            </li>
-                          ))}
+                          {playlists.length > 0 &&
+                            playlists.map((item, index) => (
+                              <li
+                                key={index}
+                                className="hover:bg-gray-700 p-1 text-xs rounded-lg"
+                                onClick={() => addVideoToPlaylist(item._id)}
+                              >
+                                {item.name}
+                              </li>
+                            ))}
                           <li
                             className="hover:bg-gray-700  rounded-lg text-center p-1 font-semibold text-xs cursor-pointer"
                             onClick={() => {
@@ -323,10 +384,35 @@ function Video() {
                   </div>
                 </div>
               </div>
-              <div>
-                <p className="text-white text-md sm:m-3  rounded-xl bg-zinc-800 p-2">
-                  {videoData.description}
+              <div className="rounded-xl bg-zinc-800 px-2">
+
+              <div className="flex justify-between items-center   ">
+                <p className="text-white text-md  "> 
+                  Description
                 </p>
+                <div>
+                  <button
+                    onClick={() => setIsDescOpen(!isDescOpen)}
+                    className="w-full text-left text-5xl  text-zinc-400   rounded focus:outline-none"
+                  >
+                    {isDescOpen ?
+                    <RiArrowDropUpLine/>
+                    
+                      : 
+                    <RiArrowDropDownLine/>
+                  }
+                  </button>
+                </div>
+              </div>
+              <div
+                className={`overflow-hidden transition-max-height duration-100 ease-in-out ${
+                  isDescOpen ? "max-h-screen" : "max-h-0"
+                }`}
+              >
+                <p className=" p-2">
+                 {videoData.description}
+                </p>
+              </div>
               </div>
             </div>
 

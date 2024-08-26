@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DragAndDropFileUpload from "../components/DragAndDrop";
 import { uploadeVideo } from "../api/videoService";
 import Loader from "../components/Loader/Loader";
+import "../components/Loader/LineLoader.css";
 
 function Publish() {
   const [title, setTitle] = useState("");
@@ -50,6 +51,7 @@ function Publish() {
       handleUpload(formData);
     }
     setTimeout(() => {
+      setPopUpMessage("")
       setShowPopup(false);
     }, 2000);
   };
@@ -89,15 +91,17 @@ function Publish() {
   }
   };
 
-  if(loading){
-    return <div className="flex justify-center items-center bg-zinc-900 w-full h-[95vh]">
-      <Loader/>
-    </div>
-  }
+  // if(loading){
+  //   return <div className="flex justify-center items-center bg-zinc-900 w-full h-[95vh]">
+  //     <Loader/>
+  //   </div>
+  // }
 
   return (
     <div className="flex  sm:h-[88vh] h-full  w-full">
       <div className="bg-zinc-900   sm:pl-[10vw]    flex-1 overflow-auto    text-white">
+      {loading && <div className="w-full processLoader"></div>}
+
         <div className="  sm:p-2 flex sm:flex-row flex-col    sm:justify-between gap-3 h-full ">
           <div className="  h-[10%] sm:hidden block text-xl p-2  font-extrabold text-zinc-200 ">
             Your Stage Awaits: Upload Your Masterpiece

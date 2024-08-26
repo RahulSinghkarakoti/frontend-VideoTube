@@ -17,7 +17,7 @@ const getHomeVideo = async () => {
       setTimeout(async () => {
         const result = await axiosInstance.get("/video");
         resolve(result);
-      }, 1000); // Delay for 3 seconds
+      }, 1000); // Delay for 1 seconds
     });
     
     return response.data;

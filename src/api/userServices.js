@@ -1,11 +1,11 @@
 import axiosInstance from "./axiosInstance";
 
 const login = async (inputs) => {
-  // console.log("login");
+  console.log("login");
   try {
     const response = await axiosInstance.post("/users/login", inputs);
     return response.data;
-  } catch (error) {
+  } catch (error) { 
     throw error;
   }
 };

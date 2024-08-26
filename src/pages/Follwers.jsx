@@ -26,7 +26,7 @@ function Subscriber() {
           <div className=" p-2 flex flex-wrap  gap-2">
             {followers &&
               followers.map((item) => (
-                <div className="bg-zinc-700 p-2 w-1/3  rounded-xl flex items-center gap-2  ">
+                <div className="bg-zinc-700 p-2 sm:w-1/3  rounded-xl flex items-center gap-2  ">
                   <img
                     src={item.subscriber.avatar}
                     alt=""

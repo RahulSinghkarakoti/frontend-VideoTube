@@ -17,6 +17,7 @@ function MyPlaylist() {
     try {
       const response = await getUserPlaylists(userData._id);
       setPlaylist(response.data);
+      console.log(response.data)
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -81,6 +82,7 @@ function MyPlaylist() {
   return (
     <div className="flex h-screen w-full">
       <div className="bg-zinc-900  sm:pl-[10vw]   scrollbar-hide  flex-1 overflow-auto">
+        
         <div className="h-full   text-white p-2">
         {  showCreateForm ? (
      
@@ -136,13 +138,16 @@ function MyPlaylist() {
                   </h1>
                 </div>
               </div>
-              {playlist.map((item, index) => {
+              {playlist.length>0 ?  playlist.map((item, index) => {
                 return (
                   <Link to={`/playlist/${item._id}`} key={index}>
                     <Playlistcard name={item.name} props={item} />
                   </Link>
                 );
-              })}
+              })
+              :
+              null
+            }
             </div>
           </>
         </div>
